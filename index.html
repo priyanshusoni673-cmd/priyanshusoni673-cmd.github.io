@@ -9,22 +9,10 @@
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#ffd6e8,#ffeaf4);
+background:linear-gradient(135deg,#ffe6f0,#ffd6e8);
 text-align:center;
 overflow-x:hidden;
-}
-
-/* floating hearts */
-.heart{
-position:fixed;
-color:#ff6fa5;
-animation:floatUp 6s linear infinite;
-font-size:20px;
-}
-
-@keyframes floatUp{
-0%{transform:translateY(100vh);opacity:1;}
-100%{transform:translateY(-10vh);opacity:0;}
+transition:1s;
 }
 
 .hidden{display:none;}
@@ -45,24 +33,32 @@ transition:0.3s;
 
 button:hover{
 background:#ff4f8b;
-transform:scale(1.05);
-}
-
-input{
-padding:10px;
-border-radius:20px;
-border:1px solid pink;
+transform:scale(1.08);
 }
 
 .section{
-animation:fade 0.5s ease-in-out;
+animation:fade 0.7s ease-in-out;
 }
 
 @keyframes fade{
-from{opacity:0;}
-to{opacity:1;}
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
 }
 
+/* floating hearts */
+.heart{
+position:fixed;
+color:#ff6fa5;
+animation:floatUp 6s linear infinite;
+font-size:20px;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* gallery */
 .gallery{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
@@ -99,9 +95,18 @@ width:80%;
 border-radius:20px;
 }
 
-#countdown{
-font-size:18px;
-margin:15px;
+/* confetti */
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+background:red;
+top:0;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+to{transform:translateY(100vh) rotate(720deg);}
 }
 
 #musicBtn{
@@ -116,7 +121,6 @@ background:#ff4f8b;
 
 <body onclick="secretClick()">
 
-<!-- floating hearts generator -->
 <script>
 setInterval(()=>{
 let heart=document.createElement("div");
@@ -131,7 +135,7 @@ setTimeout(()=>heart.remove(),6000);
 <!-- PASSWORD -->
 <div id="login">
 <h1>Enter Secret Word 💕</h1>
-<input type="password" id="pass" placeholder="Cutu knows ❤️">
+<input type="password" id="pass">
 <br>
 <button onclick="checkPass()">Enter</button>
 <p id="wrong" style="color:red;"></p>
@@ -146,7 +150,7 @@ setTimeout(()=>heart.remove(),6000);
 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
 </audio>
 
-<h1>Happy Birthday Satakshu 🎂🍓💖</h1>
+<h1>Happy Birthday Satakshu 🍓💖</h1>
 <div id="countdown"></div>
 
 <button onclick="showSection('message')">💌 Message</button>
@@ -156,14 +160,8 @@ setTimeout(()=>heart.remove(),6000);
 <button onclick="showSection('ending')">🎁 Final Surprise</button>
 
 <div id="message" class="hidden section">
-<h2>My Sweet Satakshu 🍓</h2>
-<p>
-One year ago, my world changed.  
-You are my strawberry happiness 🍓  
-My favorite chocolate moment 🍫  
-My calm, my smile, my everything.  
-Forever yours, Cutu ❤️
-</p>
+<h2>My Sweet Satakshu 💕</h2>
+<p id="typedText"></p>
 </div>
 
 <div id="gallery" class="hidden section">
@@ -195,7 +193,7 @@ Forever yours, Cutu ❤️
 
 <div id="play" class="hidden section">
 <h2>Play With Me 😏</h2>
-<button onclick="alert('Obviously yes 💕')">Do you love me?</button>
+<button onclick="loveAnswer()">Do you love me?</button>
 <button onclick="alert('Hug received by Cutu 🤗')">Send Hug</button>
 <button onclick="launchConfetti()">Make it Magical 🎆</button>
 </div>
@@ -205,7 +203,6 @@ Forever yours, Cutu ❤️
 <p>
 But you came into my life once...  
 And that changed everything.  
-I promise to stand beside you always.  
 Forever yours, Cutu ❤️
 </p>
 </div>
@@ -219,6 +216,7 @@ if(document.getElementById("pass").value==="CUTULOVE0203"){
 document.getElementById("login").classList.add("hidden");
 document.getElementById("main").classList.remove("hidden");
 document.getElementById("bgMusic").play();
+startTyping();
 }else{
 document.getElementById("wrong").innerText="Wrong password 💔";
 }
@@ -238,12 +236,22 @@ document.body.appendChild(div);
 
 function toggleMusic(){
 let music=document.getElementById("bgMusic");
-if(music.paused){music.play();}
-else{music.pause();}
+music.paused?music.play():music.pause();
+}
+
+function loveAnswer(){
+alert("Obviously yes 💕");
 }
 
 function launchConfetti(){
-alert("✨ Magical Confetti For Satakshu ✨");
+for(let i=0;i<100;i++){
+let conf=document.createElement("div");
+conf.className="confetti";
+conf.style.left=Math.random()*100+"vw";
+conf.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+document.body.appendChild(conf);
+setTimeout(()=>conf.remove(),3000);
+}
 }
 
 var countDownDate=new Date("March 2, 2026 00:00:00").getTime();
@@ -265,14 +273,29 @@ document.getElementById("countdown").innerHTML="IT'S SATAKSHU'S DAY 🎉";
 }
 },1000);
 
-/* secret 5 click message */
 let clickCount=0;
 function secretClick(){
 clickCount++;
 if(clickCount==5){
-alert("Secret message: I love you more than strawberries 🍓💖");
+alert("Secret: I love you more than strawberries 🍓💖");
 }
 }
+
+/* typing effect */
+function startTyping(){
+let text="One year ago, my life changed forever. You are my strawberry happiness 🍓 and my sweetest chocolate moment 🍫. Forever yours, Cutu ❤️";
+let i=0;
+let speed=40;
+function type(){
+if(i<text.length){
+document.getElementById("typedText").innerHTML+=text.charAt(i);
+i++;
+setTimeout(type,speed);
+}
+}
+type();
+}
+
 </script>
 
 </body>
