@@ -8,10 +8,23 @@
 <style>
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
-background: linear-gradient(135deg,#ffd6e8,#ffeaf4);
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#ffd6e8,#ffeaf4);
 text-align:center;
 overflow-x:hidden;
+}
+
+/* floating hearts */
+.heart{
+position:fixed;
+color:#ff6fa5;
+animation:floatUp 6s linear infinite;
+font-size:20px;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
 }
 
 .hidden{display:none;}
@@ -19,18 +32,20 @@ overflow-x:hidden;
 h1,h2,p{color:#ff4f8b;}
 
 button{
-padding:12px 20px;
+padding:12px 22px;
 margin:10px;
 border:none;
-border-radius:25px;
+border-radius:30px;
 background:#ff7eb3;
 color:white;
 font-size:16px;
 cursor:pointer;
+transition:0.3s;
 }
 
 button:hover{
 background:#ff4f8b;
+transform:scale(1.05);
 }
 
 input{
@@ -39,10 +54,19 @@ border-radius:20px;
 border:1px solid pink;
 }
 
+.section{
+animation:fade 0.5s ease-in-out;
+}
+
+@keyframes fade{
+from{opacity:0;}
+to{opacity:1;}
+}
+
 .gallery{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-gap:10px;
+gap:12px;
 padding:20px;
 }
 
@@ -51,6 +75,11 @@ width:100%;
 border-radius:20px;
 box-shadow:0 0 15px pink;
 cursor:pointer;
+transition:0.3s;
+}
+
+.gallery img:hover{
+transform:scale(1.05);
 }
 
 .popup{
@@ -72,12 +101,32 @@ border-radius:20px;
 
 #countdown{
 font-size:18px;
-margin-top:20px;
+margin:15px;
 }
+
+#musicBtn{
+position:fixed;
+top:15px;
+right:15px;
+background:#ff4f8b;
+}
+
 </style>
 </head>
 
-<body>
+<body onclick="secretClick()">
+
+<!-- floating hearts generator -->
+<script>
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.style.left=Math.random()*100+"vw";
+heart.innerHTML="💖";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},800);
+</script>
 
 <!-- PASSWORD -->
 <div id="login">
@@ -91,7 +140,13 @@ margin-top:20px;
 <!-- MAIN -->
 <div id="main" class="hidden">
 
-<h1>Happy Birthday Satakshu 🎂💖</h1>
+<button id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+<audio id="bgMusic" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<h1>Happy Birthday Satakshu 🎂🍓💖</h1>
 <div id="countdown"></div>
 
 <button onclick="showSection('message')">💌 Message</button>
@@ -100,21 +155,18 @@ margin-top:20px;
 <button onclick="showSection('play')">🎮 Play</button>
 <button onclick="showSection('ending')">🎁 Final Surprise</button>
 
-<!-- MESSAGE -->
-<div id="message" class="hidden">
-<h2>My Sweet Satakshu 💕</h2>
+<div id="message" class="hidden section">
+<h2>My Sweet Satakshu 🍓</h2>
 <p>
-One year ago, my life changed forever.  
-You are my strawberry smile 🍓  
-My favorite chocolate 🍫  
-My peace, my happiness, my everything.  
-Happy Birthday my love ❤️  
-Forever yours, Cutu.
+One year ago, my world changed.  
+You are my strawberry happiness 🍓  
+My favorite chocolate moment 🍫  
+My calm, my smile, my everything.  
+Forever yours, Cutu ❤️
 </p>
 </div>
 
-<!-- GALLERY -->
-<div id="gallery" class="hidden">
+<div id="gallery" class="hidden section">
 <h2>Our Memories 📸</h2>
 <div class="gallery">
 <img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
@@ -125,8 +177,7 @@ Forever yours, Cutu.
 </div>
 </div>
 
-<!-- REASONS -->
-<div id="reasons" class="hidden">
+<div id="reasons" class="hidden section">
 <h2>10 Reasons I Love You 💗</h2>
 <p>
 1. Your smile 😍 <br>
@@ -142,16 +193,14 @@ Forever yours, Cutu.
 </p>
 </div>
 
-<!-- PLAY -->
-<div id="play" class="hidden">
+<div id="play" class="hidden section">
 <h2>Play With Me 😏</h2>
 <button onclick="alert('Obviously yes 💕')">Do you love me?</button>
 <button onclick="alert('Hug received by Cutu 🤗')">Send Hug</button>
-<button onclick="alert('✨ Magical Moment ✨')">Make it Magical</button>
+<button onclick="launchConfetti()">Make it Magical 🎆</button>
 </div>
 
-<!-- ENDING -->
-<div id="ending" class="hidden">
+<div id="ending" class="hidden section">
 <h2>Some birthdays come every year... 🎂</h2>
 <p>
 But you came into my life once...  
@@ -164,18 +213,19 @@ Forever yours, Cutu ❤️
 </div>
 
 <script>
+
 function checkPass(){
-if(document.getElementById("pass").value === "CUTULOVE0203"){
+if(document.getElementById("pass").value==="CUTULOVE0203"){
 document.getElementById("login").classList.add("hidden");
 document.getElementById("main").classList.remove("hidden");
-}
-else{
+document.getElementById("bgMusic").play();
+}else{
 document.getElementById("wrong").innerText="Wrong password 💔";
 }
 }
 
 function showSection(id){
-document.querySelectorAll("#main > div").forEach(div=>div.classList.add("hidden"));
+document.querySelectorAll(".section").forEach(div=>div.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
 }
 
@@ -186,24 +236,43 @@ div.innerHTML=`<img src="${src}" onclick="this.parentElement.remove()">`;
 document.body.appendChild(div);
 }
 
-var countDownDate = new Date("March 2, 2026 00:00:00").getTime();
-
-setInterval(function() {
-var now = new Date().getTime();
-var distance = countDownDate - now;
-
-var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-document.getElementById("countdown").innerHTML =
-days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-if (distance < 0) {
-document.getElementById("countdown").innerHTML = "IT'S SATAKSHU'S DAY 🎉";
+function toggleMusic(){
+let music=document.getElementById("bgMusic");
+if(music.paused){music.play();}
+else{music.pause();}
 }
-}, 1000);
+
+function launchConfetti(){
+alert("✨ Magical Confetti For Satakshu ✨");
+}
+
+var countDownDate=new Date("March 2, 2026 00:00:00").getTime();
+
+setInterval(function(){
+var now=new Date().getTime();
+var distance=countDownDate-now;
+
+var days=Math.floor(distance/(1000*60*60*24));
+var hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+var minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+var seconds=Math.floor((distance%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML=
+days+"d "+hours+"h "+minutes+"m "+seconds+"s ";
+
+if(distance<0){
+document.getElementById("countdown").innerHTML="IT'S SATAKSHU'S DAY 🎉";
+}
+},1000);
+
+/* secret 5 click message */
+let clickCount=0;
+function secretClick(){
+clickCount++;
+if(clickCount==5){
+alert("Secret message: I love you more than strawberries 🍓💖");
+}
+}
 </script>
 
 </body>
