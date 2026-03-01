@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Satakshu 💖</title>
+
+<style>
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background: linear-gradient(135deg,#ffd6e8,#ffeaf4);
+text-align:center;
+overflow-x:hidden;
+}
+
+.hidden{display:none;}
+
+h1,h2,p{color:#ff4f8b;}
+
+button{
+padding:12px 20px;
+margin:10px;
+border:none;
+border-radius:25px;
+background:#ff7eb3;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#ff4f8b;
+}
+
+input{
+padding:10px;
+border-radius:20px;
+border:1px solid pink;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:10px;
+padding:20px;
+}
+
+.gallery img{
+width:100%;
+border-radius:20px;
+box-shadow:0 0 15px pink;
+cursor:pointer;
+}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.popup img{
+width:80%;
+border-radius:20px;
+}
+
+#countdown{
+font-size:18px;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD -->
+<div id="login">
+<h1>Enter Secret Word 💕</h1>
+<input type="password" id="pass" placeholder="Cutu knows ❤️">
+<br>
+<button onclick="checkPass()">Enter</button>
+<p id="wrong" style="color:red;"></p>
+</div>
+
+<!-- MAIN -->
+<div id="main" class="hidden">
+
+<h1>Happy Birthday Satakshu 🎂💖</h1>
+<div id="countdown"></div>
+
+<button onclick="showSection('message')">💌 Message</button>
+<button onclick="showSection('gallery')">📸 Memories</button>
+<button onclick="showSection('reasons')">💖 Why I Love You</button>
+<button onclick="showSection('play')">🎮 Play</button>
+<button onclick="showSection('ending')">🎁 Final Surprise</button>
+
+<!-- MESSAGE -->
+<div id="message" class="hidden">
+<h2>My Sweet Satakshu 💕</h2>
+<p>
+One year ago, my life changed forever.  
+You are my strawberry smile 🍓  
+My favorite chocolate 🍫  
+My peace, my happiness, my everything.  
+Happy Birthday my love ❤️  
+Forever yours, Cutu.
+</p>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="hidden">
+<h2>Our Memories 📸</h2>
+<div class="gallery">
+<img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
+<img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
+<img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
+<img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
+<img src="https://via.placeholder.com/200" onclick="openImg(this.src)">
+</div>
+</div>
+
+<!-- REASONS -->
+<div id="reasons" class="hidden">
+<h2>10 Reasons I Love You 💗</h2>
+<p>
+1. Your smile 😍 <br>
+2. Your kindness 💕 <br>
+3. Your laugh 😂 <br>
+4. Your strawberry love 🍓 <br>
+5. Your chocolate obsession 🍫 <br>
+6. Your care ❤️ <br>
+7. Your support 🤗 <br>
+8. Your eyes ✨ <br>
+9. Your loyalty 💍 <br>
+10. Because you are Satakshu 💖
+</p>
+</div>
+
+<!-- PLAY -->
+<div id="play" class="hidden">
+<h2>Play With Me 😏</h2>
+<button onclick="alert('Obviously yes 💕')">Do you love me?</button>
+<button onclick="alert('Hug received by Cutu 🤗')">Send Hug</button>
+<button onclick="alert('✨ Magical Moment ✨')">Make it Magical</button>
+</div>
+
+<!-- ENDING -->
+<div id="ending" class="hidden">
+<h2>Some birthdays come every year... 🎂</h2>
+<p>
+But you came into my life once...  
+And that changed everything.  
+I promise to stand beside you always.  
+Forever yours, Cutu ❤️
+</p>
+</div>
+
+</div>
+
+<script>
+function checkPass(){
+if(document.getElementById("pass").value === "CUTULOVE0203"){
+document.getElementById("login").classList.add("hidden");
+document.getElementById("main").classList.remove("hidden");
+}
+else{
+document.getElementById("wrong").innerText="Wrong password 💔";
+}
+}
+
+function showSection(id){
+document.querySelectorAll("#main > div").forEach(div=>div.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+}
+
+function openImg(src){
+let div=document.createElement("div");
+div.className="popup";
+div.innerHTML=`<img src="${src}" onclick="this.parentElement.remove()">`;
+document.body.appendChild(div);
+}
+
+var countDownDate = new Date("March 2, 2026 00:00:00").getTime();
+
+setInterval(function() {
+var now = new Date().getTime();
+var distance = countDownDate - now;
+
+var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+document.getElementById("countdown").innerHTML =
+days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+if (distance < 0) {
+document.getElementById("countdown").innerHTML = "IT'S SATAKSHU'S DAY 🎉";
+}
+}, 1000);
+</script>
+
+</body>
+</html>
